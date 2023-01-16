@@ -1,0 +1,465 @@
+<style>
+h1, h2 {
+    margin-top: 30px;
+}
+h1, h2 {
+    color: #f57171;
+}
+h3, h4, h5 {
+    color: #de4545;
+}
+body {
+    background-color: #222222;
+}
+li a{
+    color: #f57171;
+}
+li:hover ol li {
+    display: block;
+}
+li ol li {
+    display: none;
+}
+li ol li a {
+    color: #de4545;
+}
+p, ul {
+    margin-left: 20px;
+}
+pre {
+    background-color: #171717;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 20px;
+    border: 2px solid #191919;
+}
+table{
+    border-collapse:collapse;
+}
+table, table td{
+    border: 1px solid #c0c0c0;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+#rootref {
+    position: fixed;
+    scale: 2;
+    text-decoration: none;
+    bottom: 20;
+    right: 20;
+    background-color: #e6e6e6;
+    color: #222;
+    border-radius: 3px;
+    width: 15px;
+    height: 15px;
+    text-align: center;
+}
+* {
+    color: #e6e6e6;
+}
+</style>
+<div id="root">
+
+</div>
+<p><a href="#root"><a id="rootref" href="#root">^</a></a></p>
+<ol type="1">
+<li><a href="#rt_swi_cisco">RT SWI Cisco</a>
+<ol type="1">
+<li><a href="#rt_swi_cisco__hostname">Hostname</a></li>
+<li><a href="#rt_swi_cisco__domain">Domain</a></li>
+<li><a href="#rt_swi_cisco__password">Password</a></li>
+<li><a href="#rt_swi_cisco__ssh">SSH</a></li>
+<li><a href="#rt_swi_cisco__telnet">Telnet</a></li>
+<li><a href="#rt_swi_cisco__con">Console</a></li>
+<li><a href="#rt_swi_cisco__ntp">NTP</a></li>
+<li><a href="#rt_swi_cisco__snmp">SNMP</a></li>
+<li><a href="#rt_swi_cisco__int">Interface</a></li>
+<li><a href="#rt_swi_cisco__sub_int">Sub-Interfaces</a></li>
+<li><a href="#rt_swi_cisco__acl_set">ACL in interface</a></li>
+<li><a href="#rt_swi_cisco__route_static">Route static</a></li>
+<li><a href="#rt_swi_cisco__default_route">Default route</a></li>
+<li><a href="#rt_swi_cisco__rip">RIP</a></li>
+<li><a href="#rt_swi_cisco__eigrp">EIGRP</a></li>
+<li><a href="#rt_swi_cisco__ospf">OSPF</a></li>
+<li><a href="#rt_swi_cisco__internet">Internet</a></li>
+<li><a href="#rt_swi_cisco__vpn">VPN</a></li>
+<li><a href="#rt_swi_cisco__acl">ACLs</a></li>
+<li><a href="#rt_swi_cisco__vlan">VLANs</a></li>
+<li><a href="#rt_swi_cisco__trunk">Trunk</a></li>
+<li><a href="#rt_swi_cisco__connection">Distant Connection</a></li>
+</ol></li>
+<li><a href="#fw_cisco">FW Cisco</a>
+<ol type="1">
+<li><a href="#fw_cisco__minimal">Minimal config</a></li>
+<li><a href="#fw_cisco__ssh">SSH</a></li>
+<li><a href="#fw_cisco__ntp">NTP</a></li>
+<li><a href="#fw_cisco__snmp">SNMP</a></li>
+<li><a href="#fw_cisco__dhcp">DHCP</a></li>
+<li><a href="#fw_cisco__http">HTTP</a></li>
+<li><a href="#fw_cisco__log">Logs</a></li>
+<li><a href="#fw_cisco__int">Interface</a></li>
+<li><a href="#fw_cisco__man_int">Management interface</a></li>
+<li><a href="#fw_cisco__default">Default route</a></li>
+<li><a href="#fw_cisco__pat">PAT</a></li>
+<li><a href="#fw_cisco__nat">NAT</a></li>
+</ol></li>
+<li><a href="#std_emf">STD EMF</a>
+<ol type="1">
+<li><a href="#std_emf__domain">Domain</a></li>
+<li><a href="#std_emf__passwords">Passwords</a></li>
+<li><a href="#std_emf__users">Users</a></li>
+</ol></li>
+</ol>
+<hr />
+<h1 id="router-switch-cisco">Router / Switch Cisco
+<a name="rt_swi_cisco"></a></h1>
+<h2 id="basic-configurations">Basic configurations</h2>
+<h3 id="hostname">Hostname <a name="rt_swi_cisco__hostname"></a></h3>
+<pre><code>conf t
+host &lt;HostName&gt;
+end</code></pre>
+<h3 id="domain">Domain <a name="rt_swi_cisco__domain"></a></h3>
+<pre><code>conf t
+no ip domain lookup
+ip domain-name &lt;domain&gt;
+end</code></pre>
+<h3 id="password">Password <a name="rt_swi_cisco__password"></a></h3>
+<pre><code>conf t
+enable pass &lt;password&gt;
+end</code></pre>
+<h3 id="ssh">SSH <a name="rt_swi_cisco__ssh"></a></h3>
+<p>REQ:</p>
+<ul>
+<li>Hostname</li>
+<li>Domain</li>
+</ul>
+<pre><code>conf t
+
+crypto key generate rsa
+1024
+
+username &lt;usernameSSH&gt; password 0 &lt;passwdSSH&gt;
+ip ssh authentication-retries 2
+ip ssh version 2
+
+line aux 0
+ stopbits 1
+
+line vty 0 4
+ logging synchronous
+ login local
+ transport input ssh
+ transport output ssh
+
+ip ssh version 2
+end</code></pre>
+<h3 id="telnet">Telnet <a name="rt_swi_cisco__telnet"></a></h3>
+<pre><code>line vty 0 4
+ transport input telnet
+ password &lt;passwdTELNET&gt;
+ login</code></pre>
+<h3 id="console">Console <a name="rt_swi_cisco__con"></a></h3>
+<pre><code>line con 0
+ password &lt;passwdCON&gt;
+ logging synchronous
+ transport input none
+ stopbits 1</code></pre>
+<h3 id="ntp">NTP <a name="rt_swi_cisco__ntp"></a></h3>
+<pre><code>conf t
+ntp server 162.23.41.10
+clock timezone WEST 1 0
+clock summer-time WEST recurring
+end</code></pre>
+<h3 id="snmp">SNMP <a name="rt_swi_cisco__snmp"></a></h3>
+<pre><code>conf t
+Snmp-server community EMF_Public RO
+Snmp-server community EMF_Private RW
+snmp-server location &quot;A42-09&quot;
+snmp-server contact &quot;EMF/KuciE&quot;
+end</code></pre>
+<h2 id="interfaces">Interfaces</h2>
+<h3 id="define-and-enable">Define and Enable
+<a name="rt_swi_cisco__int"></a></h3>
+<pre><code>conf t
+int &lt;int&gt;
+ip addr &lt;IPv4&gt; &lt;Mask&gt;
+desc &lt;descInt&gt;
+no sh
+end</code></pre>
+<h3 id="sub-interfaces">Sub-interfaces
+<a name="rt_swi_cisco__sub_int"></a></h3>
+<pre><code>conf t
+int &lt;int&gt;
+no sh
+int &lt;int&gt;.&lt;SubInterface&gt;
+encapsulation dot1Q &lt;VlanID&gt;
+ip addr &lt;IPv4&gt; &lt;Mask&gt;
+end</code></pre>
+<h3 id="use-acl">Use ACL <a name="rt_swi_cisco__acl_set"></a></h3>
+<pre><code>conf t
+int &lt;int&gt;
+ip access-group &lt;acl&gt; &lt;in/out&gt;
+end</code></pre>
+<h2 id="routing">Routing</h2>
+<h3 id="static">Static <a name="rt_swi_cisco__route_static"></a></h3>
+<pre><code>conf t
+ip route &lt;subnet&gt; &lt;mask&gt; &lt;ip&gt;
+end</code></pre>
+<h3 id="default-route">Default route
+<a name="rt_swi_cisco__default_route"></a></h3>
+<pre><code>conf t
+ip route 0.0.0.0 0.0.0.0 &lt;ip&gt;
+end</code></pre>
+<h3 id="rip">RIP <a name="rt_swi_cisco__rip"></a></h3>
+<pre><code>conf t
+router rip
+versions 2
+do sh ip ro
+
+net &lt;C-Port&gt;
+
+end</code></pre>
+<h3 id="eigrp">EIGRP <a name="rt_swi_cisco__eigrp"></a></h3>
+<pre><code>conf t
+router eigrp &lt;ID&gt;
+do sh ip ro
+
+net &lt;C-Subnet&gt; &lt;WildcardMask&gt;
+
+end</code></pre>
+<h3 id="ospf">OSPF <a name="rt_swi_cisco__ospf"></a></h3>
+<h4 id="internal-router">Internal Router
+<a name="rt_swi_cisco__ospf_internal"></a></h4>
+<pre><code>conf t
+router ospf &lt;ospfID&gt;
+
+do sh ip ro
+net &lt;ConnectedSubnet&gt; &lt;WildcardMask&gt; area &lt;AreaID&gt;
+
+end</code></pre>
+<h4 id="border-router">Border Router
+<a name="rt_swi_cisco__ospf_border"></a></h4>
+<pre><code>conf t
+router ospf &lt;ID&gt;
+
+do sh ip ro
+net &lt;ConnectedSubnet&gt; &lt;WildcardMask&gt; area &lt;AreaID&gt;
+
+area &lt;AreaID&gt; range &lt;Subnets∑&gt; &lt;Mask&gt;
+
+end</code></pre>
+<h3 id="to-internet">To Internet
+<a name="rt_swi_cisco__internet"></a></h3>
+<pre><code>conf t
+int &lt;intInternet&gt;
+ip nat outside
+
+int &lt;othersInterfaces&gt;
+ip nat inside
+
+ip nat inside source list &lt;alc&gt; interface &lt;intInternet&gt; overload
+
+end
+
+sh ip nat translation</code></pre>
+<h2 id="vpns">VPNs <a name="rt_swi_cisco__vpn"></a></h2>
+<pre><code>! Create isakmp policy
+conf t
+ cry isakmp policy &lt;PolicyID&gt;
+  encr 3des
+  hash md5
+  auth pre
+  group 2
+  lifetime &lt;LifeTime&gt;
+  exit
+ cry isakmp key &lt;Passwd&gt; address &lt;PublicDestIP&gt;
+ 
+! Create VPN ALC
+ ip access-list extended &lt;ACLID&gt;
+  permit ip &lt;SrcIP&gt; &lt;SrcWildmask&gt; &lt;DestIP&gt; &lt;DestWildmask&gt;
+  exit
+
+! Add IPSec
+ cry ipsec transform &lt;TSName&gt; esp-3des esp-md5-hmac
+ cry map &lt;MapName&gt; &lt;MapID&gt; ipsec-isakmp
+  set peer &lt;DescIP&gt;
+  set transform &lt;TSName&gt;
+  match address &lt;ACLID&gt;
+  exit
+
+! Add map in interface
+ int &lt;IntOUT&gt;
+  cry map &lt;MapName&gt;
+  end</code></pre>
+<h2 id="acls">ACLs <a name="rt_swi_cisco__acl"></a></h2>
+<h3 id="standard">Standard</h3>
+<pre><code>conf t
+ip access-list standard &lt;1-99&gt;
+
+remark &lt;remark&gt;
+permit &lt;subnet&gt; &lt;wildcardMask&gt;
+deny host &lt;ip&gt;
+
+end</code></pre>
+<h3 id="extended">Extended</h3>
+<pre><code>conf t
+ip access-list standard &lt;alc(&gt;99)&gt;
+
+remark &lt;reamark&gt;
+permit &lt;transport&gt; &lt;subnetSrc&gt; &lt;wildcardMaskSrc&gt; lt &lt;portSrc&gt; &lt;subnetDest&gt; &lt;wildcardMaskDest&gt; eq &lt;protocol&gt; 
+deny &lt;transport&gt; host &lt;ipSrc&gt; host &lt;ipDest&gt; gt &lt;protocol&gt;
+
+end</code></pre>
+<h2 id="vlan">Vlan <a name="rt_swi_cisco__vlan"></a></h2>
+<h3 id="define">Define</h3>
+<pre><code>conf t
+vlan &lt;vlanID&gt;
+name &lt;vlanName&gt;
+end</code></pre>
+<h3 id="put-int-interface">Put int Interface</h3>
+<pre><code>conf t
+int &lt;interface&gt;
+switchport acc vl &lt;vlanID&gt;
+end</code></pre>
+<h3 id="put-in-interface-range">Put in Interface Range</h3>
+<pre><code>conf t
+int rande &lt;intMIN&gt; - &lt;intMAC&gt;
+switchport acc vl &lt;vlanID&gt;</code></pre>
+<h3 id="trunk">Trunk <a name="rt_swi_cisco__trunk"></a></h3>
+<p>Le trunk envoie tous les VLANs vers le routeur exterieur</p>
+<pre><code>conf t
+int &lt;int&gt;
+switchport mo tru
+switchport trunk allowed vlan &lt;vlanID&gt;, ...
+desc &lt;desc&gt;
+no sh
+end</code></pre>
+<h2 id="distant-connection">Distant connection
+<a name="rt_swi_cisco__connection"></a></h2>
+<ul>
+<li><p>Connect SSH</p>
+<ul>
+<li><code>ssh -l &lt;userSSH&gt; &lt;ip&gt;</code></li>
+</ul></li>
+<li><p>Connect Telnet</p>
+<ul>
+<li><code>telnet &lt;ip&gt;</code></li>
+</ul></li>
+</ul>
+<h1 id="firewall-cisco">Firewall Cisco <a name="fw_cisco"></a></h1>
+<h2 id="basic-config">Basic config</h2>
+<h3 id="hostname-password-domain">Hostname, Password, Domain
+<a name="fw_cisco__minimal"></a></h3>
+<pre><code>hostname &lt;nomFW&gt;
+enable password &lt;Password&gt;
+domain-name &lt;Domain&gt;</code></pre>
+<h3 id="ssh-1">SSH <a name="fw_cisco__ssh"></a></h3>
+<pre><code>crypto key generate rsa modulus 4096
+yes
+username &lt;name&gt; password &lt;password&gt;
+aaa authentication ssh console LOCAL
+ssh version 2
+ssh timeout &lt;timeout&gt;
+ssh &lt;management host&gt; &lt;netmark&gt; &lt;interface name&gt;
+ssh stricthostkeycheck
+banner motd </code></pre>
+<h3 id="ntp-1">NTP <a name="fw_cisco__ntp"></a></h3>
+<pre><code>ntp server &lt;servers... (195.186.4.101,84.16.73.33)&gt;
+clock timezone CET +1</code></pre>
+<h3 id="snmp-1">SNMP <a name="fw_cisco__snmp"></a></h3>
+<pre><code>snmp-server enable
+snmp-server enable traps all
+snmp-server location &quot;&lt;location&gt;&quot;
+snmp-server contact &quot;&lt;contact (e-mail)&gt;&quot;
+snmp-server community &lt;community&gt;
+snmp-server host &lt;interface name&gt; &lt;client ip addr&gt; community &lt;community name&gt; version 2c</code></pre>
+<h3 id="dhcp">DHCP <a name="fw_cisco__dhcp"></a></h3>
+<pre><code>no dhcpd auto_config &lt;interface name&gt;
+dhcpd dns &lt;DNS server #1&gt; &lt;DNS server #2&gt;
+dhcpd address &lt;ip start&gt;-&lt;ip end&gt; &lt;interface name&gt;
+dhcpd enable &lt;interface name&gt;</code></pre>
+<h3 id="http">HTTP <a name="fw_cisco__dhcp"></a></h3>
+<pre><code>asdm image disk0:/asdm-782.bin
+http server enable
+http &lt;subnet addr&gt; &lt;netmask&gt; &lt;interface&gt;</code></pre>
+<h3 id="logging">Logging <a name="fw_cisco__log"></a></h3>
+<pre><code>logging enable
+logging timestamp
+logging console &lt;log severity&gt;
+logging buffered &lt;log severity&gt;
+logging host &lt;interface name&gt; &lt;host&gt;</code></pre>
+<h2 id="setup-interface">Setup interface</h2>
+<h3 id="normal-interface">Normal interface
+<a name="fw_cisco__int"></a></h3>
+<pre><code>interface &lt;int&gt;
+  nameif &lt;interface name&gt;
+  security-level &lt;sl&gt;
+  ip address &lt;ip addr&gt; &lt;netmask&gt;
+  no shutdown</code></pre>
+<h3 id="management-interface">Management interface
+<a name="fw_cisco__man_int"></a></h3>
+<pre><code>interface &lt;int&gt;
+  management-only
+  nameif &lt;interface name&gt;
+  security-level 100
+  ip address &lt;ip addr&gt; &lt;netmask&gt;
+  no shutdown</code></pre>
+<h2 id="routing-1">Routing</h2>
+<h3 id="default-route-1">Default route
+<a name="fw_cisco__default"></a></h3>
+<pre><code>route &lt;interface name&gt; 0.0.0.0 0.0.0.0 192.168.1.1</code></pre>
+<h3 id="pat">PAT <a name="fw_cisco__pat"></a></h3>
+<pre><code>object network &lt;object name&gt;
+  subnet &lt;ip addr output&gt; &lt;netmask&gt;
+  nat (&lt;IN&gt;,&lt;OUT&gt;) dynamic interface</code></pre>
+<h3 id="nat">NAT <a name="fw_cisco__nat"></a></h3>
+<pre><code>object network &lt;object name&gt;
+  host &lt;inside ip addr&gt;
+  nat (&lt;OUT&gt;,&lt;IN&gt;) static &lt;outside ip addr&gt;</code></pre>
+<h1 id="standards-emf">Standards EMF <a name="std_emf"></a></h1>
+<h2 id="domain-1">Domain <a name="std_emf__domain"></a></h2>
+<ul>
+<li>emf.local</li>
+</ul>
+<h2 id="passwords">Passwords <a name="std_emf__passwords"></a></h2>
+<table>
+<thead>
+<tr class="header">
+<th>Type</th>
+<th>Password</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Enable</td>
+<td><code>Pa$$w0rdena</code></td>
+</tr>
+<tr class="even">
+<td>Console</td>
+<td><code>Pa$$w0rdcon</code></td>
+</tr>
+<tr class="odd">
+<td>SSH</td>
+<td><code>Pa$$w0rdssh</code></td>
+</tr>
+<tr class="even">
+<td>Telnet</td>
+<td><code>Pa$$w0rdtelnet</code></td>
+</tr>
+<tr class="odd">
+<td>VPN</td>
+<td><code>Pa$$w0rdvpn</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="ntp-server">NTP Server <a name="std_emf__ntp"></a></h2>
+<ul>
+<li><code>162.23.41.10</code></li>
+</ul>
+<h2 id="name">Name <a name="std_emf__users"></a></h2>
+<ul>
+<li>SSH: <code>adminSSH</code></li>
+<li>SSH PKT: <code>adminssh</code></li>
+</ul>
