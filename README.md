@@ -490,17 +490,16 @@ route <interface name> 0.0.0.0 0.0.0.0 192.168.1.1
 
 ```
 object network <object name>
-  subnet <ip addr output> <netmask>
+  subnet <subnet> <netmask>
   nat (<IN>,<OUT>) dynamic interface
 ```
-
 
 ### NAT <a name="fw_cisco__nat"></a>
 
 ```
 object network <object name>
-  host <inside ip addr>
-  nat (<OUT>,<IN>) static <outside ip addr>
+  host <private ip>
+  nat (<DMZ>,<OUT>) static <public ip>
 ```
 
 # Standards EMF <a name="std_emf"></a>

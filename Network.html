@@ -412,12 +412,12 @@ logging host &lt;interface name&gt; &lt;host&gt;</code></pre>
 <pre><code>route &lt;interface name&gt; 0.0.0.0 0.0.0.0 192.168.1.1</code></pre>
 <h3 id="pat">PAT <a name="fw_cisco__pat"></a></h3>
 <pre><code>object network &lt;object name&gt;
-  subnet &lt;ip addr output&gt; &lt;netmask&gt;
+  subnet &lt;subnet&gt; &lt;netmask&gt;
   nat (&lt;IN&gt;,&lt;OUT&gt;) dynamic interface</code></pre>
 <h3 id="nat">NAT <a name="fw_cisco__nat"></a></h3>
 <pre><code>object network &lt;object name&gt;
-  host &lt;inside ip addr&gt;
-  nat (&lt;OUT&gt;,&lt;IN&gt;) static &lt;outside ip addr&gt;</code></pre>
+  host &lt;private ip&gt;
+  nat (&lt;DMZ&gt;,&lt;OUT&gt;) static &lt;public ip&gt;</code></pre>
 <h1 id="standards-emf">Standards EMF <a name="std_emf"></a></h1>
 <h2 id="domain-1">Domain <a name="std_emf__domain"></a></h2>
 <ul>
